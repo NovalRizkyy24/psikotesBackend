@@ -33,6 +33,10 @@ function transformPersonalValues(userResult, interpretation) {
         const key = dim.key; 
         const wording = dimensionsWording[key];
 
+        if (!wording) {
+            throw new Error(`500 Interpretation wording not found for dimension key: ${key} in ${interpretation.psikotestCode}`);
+        }
+
         return {
             rank: index + 1,
             dimension: wording.title,
@@ -53,6 +57,8 @@ function transformPersonalValues(userResult, interpretation) {
     top3Values.forEach(dim => {
         const key = dim.key;
         const wording = dimensionsWording[key];
+        
+        if (!wording) return;
         
         const textContent = `${wording.description}\n\n**Manifestasi dalam Kehidupan:**\n${wording.manifestation}\n\n**Kekuatan dan Tantangan:**\n${wording.strengthChallenges}`;
 

@@ -10,6 +10,7 @@ async function connectDb() {
         return dbInstance;
     }
     await client.connect();
+    // Menggunakan dbName dari URI untuk fleksibilitas
     const dbName = new URL(uri).pathname.substring(1); 
     dbInstance = client.db(dbName);
     return dbInstance;
@@ -34,6 +35,8 @@ async function getInterpretation(psikotestCode, lang, version) {
 }
 
 module.exports = {
+    // 🔥 PERBAIKAN: Export connectDb agar bisa dipanggil dari server.js
+    connectDb, 
     getAssessmentResult,
     getInterpretation,
     ObjectId
