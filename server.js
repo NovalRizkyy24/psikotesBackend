@@ -15,7 +15,9 @@ async function startServer() {
                 message: "Selamat datang di API Laporan Psikotes.",
                 instruksi: "Silakan uji coba endpoint API sesuai dengan format:",
                 endpoint: "/api/v1/results/:id?lang=id&v=1.0.0",
-                contoh_uji: "https://psikotes-backend.vercel.app/api/v1/results/68d2754ccd2e1d3a51c869a7?lang=id&v=1.0.0"
+                contoh_uji: "https://psikotes-backend.vercel.app/api/v1/results/68d2754ccd2e1d3a51c869a7?lang=id&v=1.0.0",
+                
+                github: "https://github.com/NovalRizkyy24/psikotesBackend.git"
             };
         });
 
