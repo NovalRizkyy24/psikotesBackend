@@ -1,22 +1,20 @@
+// File: TestMagang1%/src/service/transformers/personalValues.js
+
+const DIMENSION_MAP = {
+    // Memetakan kunci dari data pengguna (self_direction) ke kunci di interpretasi (selfDirection)
+    'self_direction': 'selfDirection' 
+};
+
+function getInterpretationKey(userKey) {
+    // Jika ada di map, gunakan kunci dari map, jika tidak, gunakan kunci aslinya
+    return DIMENSION_MAP[userKey] || userKey;
+}
+
 function getTop3PersonalValues(scores) {
     return Object.entries(scores)
         .map(([key, value]) => ({ key, score: value }))
         .sort((a, b) => b.score - a.score)
         .slice(0, 3);
-}
-
-// Map untuk mengoreksi ketidaksesuaian penamaan kunci dari userResult ke interpretation
-const DIMENSION_KEY_MAP = {
-    // Mengoreksi snake_case ke camelCase
-    'self_direction': 'selfDirection',
-};
-
-function getInterpretationKey(userKey) {
-    const mappedKey = DIMENSION_KEY_MAP[userKey];
-    if (mappedKey) return mappedKey;
-
-    // Mengubah ke huruf kecil untuk menangani kasus seperti 'Stimulation' di userResult
-    return userKey.toLowerCase();
 }
 
 function transformPersonalValues(userResult, interpretation) {
@@ -30,15 +28,7 @@ function transformPersonalValues(userResult, interpretation) {
         blocks: []
     };
 
-    // 🔥 PERBAIKAN UTAMA: Mengambil skor dari userResult.result.score (sesuai struktur BSON)
-    const scores = userResult.result.score; 
-    
-    // Safety check, agar tidak error Object.entries(undefined)
-    if (!scores) {
-        // Jika skor tetap undefined/null, lempar error yang lebih jelas.
-        throw new Error(`500 Data skor Personal Values (${userResult.formName}) tidak ditemukan. Periksa jalur akses skor di transformer.`);
-    }
-    
+    const scores = userResult.result.score;
     const dimensionsWording = interpretation.results.dimensions;
     const top3Values = getTop3PersonalValues(scores);
 
@@ -52,8 +42,8 @@ function transformPersonalValues(userResult, interpretation) {
     });
 
     const dimensionListItems = top3Values.map((dim, index) => {
-        const userKey = dim.key; 
-        const key = getInterpretationKey(userKey); 
+        const userKey = dim.key; // Kunci asli dari userResult
+        const key = getInterpretationKey(userKey); // Kunci yang sudah disesuaikan (misalnya 'selfDirection')
         const wording = dimensionsWording[key];
 
         if (!wording) {
@@ -79,7 +69,7 @@ function transformPersonalValues(userResult, interpretation) {
 
     top3Values.forEach(dim => {
         const userKey = dim.key;
-        const key = getInterpretationKey(userKey); 
+        const key = getInterpretationKey(userKey); // Kunci yang sudah disesuaikan
         const wording = dimensionsWording[key];
         
         if (!wording) return;

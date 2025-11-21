@@ -1,7 +1,7 @@
 function getTop2Motivations(scores) {
     return Object.entries(scores)
         .map(([key, value]) => ({ key, score: value }))
-        .sort((a, b) => b.score - a.area)
+        .sort((a, b) => b.score - a.score) 
         .slice(0, 2);
 }
 

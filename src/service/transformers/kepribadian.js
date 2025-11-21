@@ -11,6 +11,11 @@ function transformKepribadian(userResult, interpretation) {
         throw new Error('Data user atau interpretasi untuk Kepribadian tidak ditemukan');
     }
 
+    if (!userResult.score || !userResult.rank) {
+        throw new Error('500 Kepribadian data structure is unsupported or empty (Expected simple Big Five score/rank).');
+    }
+    // ------------------------------------
+
     let section = {
         id: interpretation.psikotestCode, 
         title: interpretation.meta.title, 
